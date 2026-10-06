@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -10,69 +9,342 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Emotion Intelligence</title>
-
-    <link
-        rel="stylesheet"
-        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    <meta
+        name="description"
+        content="Transformer-powered emotion analysis using DistilRoBERTa."
     >
+
+    <title>Emotion Intelligence</title>
 
     <link
         rel="stylesheet"
         href="{{ url_for('static', filename='css/style.css') }}"
     >
-
 </head>
+
 
 <body>
 
-    <main class="app-container">
+    <div class="background-glow glow-one"></div>
+    <div class="background-glow glow-two"></div>
 
-        <div class="card analysis-card">
 
-            <div class="card-body">
+    <nav class="navbar">
 
-                <h1 class="center-heading">
-                    Emotion Intelligence
-                </h1>
+        <div class="brand">
+            <div class="brand-icon">EI</div>
 
-                <p class="text-center text-muted">
-                    Analyze the emotional tone of written text using NLP.
-                </p>
+            <span>
+                Emotion Intelligence
+            </span>
+        </div>
 
-                <div class="form-group mt-4">
+        <a
+            class="github-link"
+            href="https://github.com/Syedfakhir03/emotion-intelligence-web-app"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            View on GitHub ↗
+        </a>
 
-                    <label for="textToAnalyze">
-                        Enter text to analyze
-                    </label>
+    </nav>
 
-                    <textarea
-                        class="form-control"
-                        id="textToAnalyze"
-                        rows="5"
-                        placeholder="Type something here..."
-                    ></textarea>
+
+    <main class="page-container">
+
+        <section class="hero">
+
+            <div class="model-badge">
+                Transformer NLP • DistilRoBERTa
+            </div>
+
+            <h1>
+                Understand the emotion
+                <span>behind the words.</span>
+            </h1>
+
+            <p class="hero-description">
+                Analyze written text with a transformer-based NLP model
+                and explore the probability of seven different emotions.
+            </p>
+
+        </section>
+
+
+        <section class="analysis-layout">
+
+            <!-- INPUT CARD -->
+            <div class="panel input-panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <span class="section-label">
+                            TEXT INPUT
+                        </span>
+
+                        <h2>
+                            What are you feeling?
+                        </h2>
+                    </div>
+
+                    <span
+                        id="characterCount"
+                        class="character-count"
+                    >
+                        0 characters
+                    </span>
 
                 </div>
 
-                <button
-                    type="button"
-                    class="btn btn-primary btn-block"
-                    onclick="runEmotionAnalysis()"
-                >
-                    Analyze Emotion
-                </button>
 
-                <div id="system_response"></div>
+                <form id="emotionForm">
+
+                    <textarea
+                        id="textToAnalyze"
+                        maxlength="1000"
+                        placeholder="Write something here..."
+                        required
+                    ></textarea>
+
+
+                    <div class="examples-section">
+
+                        <span class="examples-label">
+                            Try an example
+                        </span>
+
+                        <div class="example-buttons">
+
+                            <button
+                                type="button"
+                                class="example-chip"
+                                data-text="I am so excited about starting this new opportunity!"
+                            >
+                                😄 Joy
+                            </button>
+
+                            <button
+                                type="button"
+                                class="example-chip"
+                                data-text="I am terrified about what might happen tomorrow."
+                            >
+                                😨 Fear
+                            </button>
+
+                            <button
+                                type="button"
+                                class="example-chip"
+                                data-text="I am absolutely furious about what happened."
+                            >
+                                😡 Anger
+                            </button>
+
+                            <button
+                                type="button"
+                                class="example-chip"
+                                data-text="I can't believe we actually won!"
+                            >
+                                😲 Surprise
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        id="analyzeButton"
+                        class="analyze-button"
+                        type="submit"
+                    >
+
+                        <span id="buttonText">
+                            Analyze Emotion
+                        </span>
+
+                        <span
+                            id="buttonLoader"
+                            class="button-loader hidden"
+                        ></span>
+
+                    </button>
+
+                </form>
 
             </div>
 
-        </div>
+
+            <!-- RESULT CARD -->
+            <div
+                id="resultsPanel"
+                class="panel results-panel"
+            >
+
+                <div
+                    id="emptyState"
+                    class="empty-state"
+                >
+
+                    <div class="empty-icon">
+                        ✦
+                    </div>
+
+                    <h2>
+                        Your analysis will appear here
+                    </h2>
+
+                    <p>
+                        Enter some text and the model will estimate
+                        the emotional tone.
+                    </p>
+
+                </div>
+
+
+                <div
+                    id="resultsContent"
+                    class="results-content hidden"
+                >
+
+                    <span class="section-label">
+                        ANALYSIS RESULT
+                    </span>
+
+
+                    <div class="dominant-card">
+
+                        <div
+                            id="dominantEmoji"
+                            class="dominant-emoji"
+                        >
+                            😄
+                        </div>
+
+                        <div class="dominant-info">
+
+                            <span>
+                                Dominant emotion
+                            </span>
+
+                            <h2 id="dominantEmotion">
+                                Joy
+                            </h2>
+
+                        </div>
+
+                        <div
+                            id="dominantScore"
+                            class="dominant-score"
+                        >
+                            0%
+                        </div>
+
+                    </div>
+
+
+                    <div class="score-header">
+
+                        <h3>
+                            Emotion probabilities
+                        </h3>
+
+                        <span>
+                            Confidence
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        id="emotionBars"
+                        class="emotion-bars"
+                    ></div>
+
+
+                    <div class="model-info">
+
+                        <div class="status-dot"></div>
+
+                        <span>
+                            Powered by
+                            <strong>
+                                j-hartmann/emotion-english-distilroberta-base
+                            </strong>
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="technology-section">
+
+            <div class="technology-card">
+
+                <span>01</span>
+
+                <h3>
+                    Transformer Model
+                </h3>
+
+                <p>
+                    DistilRoBERTa analyzes contextual meaning instead
+                    of relying on simple keyword matching.
+                </p>
+
+            </div>
+
+
+            <div class="technology-card">
+
+                <span>02</span>
+
+                <h3>
+                    Seven Emotions
+                </h3>
+
+                <p>
+                    Anger, disgust, fear, joy, neutral, sadness
+                    and surprise are evaluated simultaneously.
+                </p>
+
+            </div>
+
+
+            <div class="technology-card">
+
+                <span>03</span>
+
+                <h3>
+                    Local Inference
+                </h3>
+
+                <p>
+                    The model runs through a Flask API and performs
+                    inference locally after the model is downloaded.
+                </p>
+
+            </div>
+
+        </section>
 
     </main>
 
+
+    <footer>
+        Built with Python, Flask, Transformers & JavaScript
+    </footer>
+
+
     <script
         src="{{ url_for('static', filename='js/app.js') }}"
+        defer
     ></script>
 
 </body>
