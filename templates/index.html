@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Emotion Intelligence</title>
+
+    <link
+        rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+<body>
+
+    <main class="app-container">
+
+        <div class="card analysis-card">
+
+            <div class="card-body">
+
+                <h1 class="center-heading">
+                    Emotion Intelligence
+                </h1>
+
+                <p class="text-center text-muted">
+                    Analyze the emotional tone of written text using NLP.
+                </p>
+
+                <div class="form-group mt-4">
+
+                    <label for="textToAnalyze">
+                        Enter text to analyze
+                    </label>
+
+                    <textarea
+                        class="form-control"
+                        id="textToAnalyze"
+                        rows="5"
+                        placeholder="Type something here..."
+                    ></textarea>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="btn btn-primary btn-block"
+                    onclick="runEmotionAnalysis()"
+                >
+                    Analyze Emotion
+                </button>
+
+                <div id="system_response"></div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <script
+        src="{{ url_for('static', filename='js/app.js') }}"
+    ></script>
+
+</body>
+
+</html>

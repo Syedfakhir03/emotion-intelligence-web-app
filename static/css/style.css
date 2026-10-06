@@ -1,0 +1,23 @@
+body {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.app-container {
+    max-width: 900px;
+    margin: 60px auto;
+}
+
+.center-heading {
+    text-align: center;
+}
+
+.analysis-card {
+    padding: 30px;
+}
+
+#system_response {
+    margin-top: 25px;
+    padding: 20px;
+    min-height: 70px;
+}
