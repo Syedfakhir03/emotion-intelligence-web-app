@@ -12,24 +12,42 @@ from transformers import (
 MODEL_NAME = "j-hartmann/emotion-english-distilroberta-base"
 
 
+def load_tokenizer():
+    """Prefer the local cache, then download if necessary."""
+
+    try:
+        return AutoTokenizer.from_pretrained(
+            MODEL_NAME,
+            local_files_only=True,
+        )
+
+    except OSError:
+        return AutoTokenizer.from_pretrained(
+            MODEL_NAME
+        )
+
+
+def load_model():
+    """Prefer the local cache, then download if necessary."""
+
+    try:
+        return AutoModelForSequenceClassification.from_pretrained(
+            MODEL_NAME,
+            local_files_only=True,
+        )
+
+    except OSError:
+        return AutoModelForSequenceClassification.from_pretrained(
+            MODEL_NAME
+        )
+
+
 @lru_cache(maxsize=1)
 def get_classifier():
-    """
-    Load the transformer model from the local Hugging Face cache.
+    """Load the classifier once and reuse it."""
 
-    The classifier is loaded only once and then reused for
-    every subsequent request.
-    """
-
-    tokenizer = AutoTokenizer.from_pretrained(
-        MODEL_NAME,
-        local_files_only=True,
-    )
-
-    model = AutoModelForSequenceClassification.from_pretrained(
-        MODEL_NAME,
-        local_files_only=True,
-    )
+    tokenizer = load_tokenizer()
+    model = load_model()
 
     return pipeline(
         task="text-classification",
@@ -54,10 +72,6 @@ def emotion_detection(text_to_analyze):
 
     predictions = classifier(text_to_analyze)
 
-    # Transformers may return:
-    # [{...}, {...}]
-    # or
-    # [[{...}, {...}]]
     if predictions and isinstance(predictions[0], list):
         predictions = predictions[0]
 

@@ -1,4 +1,5 @@
 Flask
-requests
 transformers
 torch
+requests
+gunicorn
